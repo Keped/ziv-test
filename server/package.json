@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "A user database implemented with express & mongoose",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest --testTimeout=100 --detectOpenHandles",
+    "start": "node server.js"
+  },
+  "author": "Ziv Taller",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jest": "^26.3.0",
+    "supertest": "^4.0.2"
+  }
+}
