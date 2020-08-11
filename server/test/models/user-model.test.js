@@ -1,7 +1,9 @@
 const  UserModel =require( '../../src/models/user-model');
-MOCK_USER_DATA =  {name:'TEST_USER', password:'adminadmin'};
+const MOCK_USER_DATA =  {name:'TEST_USER', password:'adminadmin'};
+
 describe("USER MODEL - SIGN UP",()=>{
     beforeAll(() => {
+        
         return UserModel.deleteOne({name:MOCK_USER_DATA.name});
     });
 

@@ -8,7 +8,6 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 app.use(express.json());
-console.log(router)
 // app.use(tokenVerifier); // TBD
 app.use(router);
 // set port, listen for requests, also export for tests

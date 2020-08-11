@@ -1,7 +1,12 @@
+/**
+ * User Model
+ * 
+ */
 const mongoose = require('./client');
 const bcrypt = require('bcryptjs');
-// const salt = bcrypt.genSaltSync(10);
-const userSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
     name: String,
     password:String,
     loginTime: Date,
@@ -14,7 +19,7 @@ const userSchema = new mongoose.Schema({
       const salt = bcrypt.genSaltSync(10);
       const passwordHash = bcrypt.hashSync(password, salt);
       try{
-          const now = Date.now();
+          const now = new Date();
           // a user is born in DB !
           const user = await this.create({
                 name, 
@@ -33,7 +38,7 @@ const userSchema = new mongoose.Schema({
         let user = null;
         let passwordIsCorrect = false;
         try{
-            user = await this.find({name});
+            user = await this.findOne({name});
             passwordIsCorrect = bcrypt.compareSync(loginData.password,user.password);
         }catch(e){
             console.error(e)
