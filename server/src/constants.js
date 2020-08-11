@@ -1,3 +1,3 @@
-export const ROUTES = {
+module.exports.ROUTES = {
     HEALTH: '/'
 }
