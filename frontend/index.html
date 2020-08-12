@@ -6,6 +6,7 @@
        <h1 id="pageTitle">YO</h1> 
        <script type="text/javascript" src="./scripts/constants.js" ></script>
        <script type="text/javascript" src="./scripts/api.js" /></script>
+       <script type="text/javascript" src="./scripts/gui.js" /></script>
        <script type="text/javascript">
         function domReady(fn) {
             // If we're early to the party
@@ -16,7 +17,17 @@
             }
         }
        
-        domReady(()=>{console.log(ApiService.logIn('lalala','000000000'))})
+        domReady(()=>{
+        
+                ApiService.logIn('lalala','000000000').then((res)=>{
+                    console.log(res)
+                    res.error && setMainTitle(res.error)
+
+                }).catch((e)=>{
+                    setMainTitle(e)
+                })
+            
+        })
        </script>
     </body>    
 </html>

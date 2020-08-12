@@ -7,11 +7,17 @@ const _request = async function(method, url, data, token){
     if(token){
         headers['client-token'] = token;
     }
-    const response = await fetch(url,{
-        method,
-        body: data && JSON.stringify(data),
-        headers
-    })
+    try{
+        const response = await fetch(url,{
+            method,
+            body: data && JSON.stringify(data),
+            headers
+        })
+        return response.json()
+    }catch(e){
+        throw(e)
+    }
+
 }
 
 

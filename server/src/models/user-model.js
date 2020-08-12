@@ -20,7 +20,7 @@ const userSchema = new Schema({
         const passwordHash = bcrypt.hashSync(password, salt);
         const found = await this.findOne({name});
         if (found){
-            throw('ERRORS.SIGNUP_USERNAME_EXISTS');
+            throw({error:'ERRORS.SIGNUP_USERNAME_EXISTS'});
         }
         const now = new Date();
         // a user is born in DB !
@@ -43,11 +43,11 @@ const userSchema = new Schema({
             passwordIsCorrect = bcrypt.compareSync(password,user.password);
         }catch(e){
             console.error(e)
-            throw("ERRORS.LOGIN_NO_SUCH_USER");
+            throw({error:"ERRORS.LOGIN_NO_SUCH_USER"});
         }
         if (!passwordIsCorrect){
             // console.log("OMG", user)
-            throw( "ERRORS.LOGIN_BAD_PASSWORD");
+            throw({error: "ERRORS.LOGIN_BAD_PASSWORD"});
         }
         return user;
   }
