@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(tokenVerifier); // TBD
 app.use(router);
+app.use(express.static('../frontend'))
 // set port, listen for requests, also export for tests
 const PORT = 8080; // TBD from env variable
 // export the app itself so we can e2e

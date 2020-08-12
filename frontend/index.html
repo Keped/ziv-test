@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="./style/general.css">
+    </head>
+    <body class="elementor-test">
+       <h1 id="pageTitle">YO</h1> 
+       <script type="text/javascript" src="./scripts/constants.js" ></script>
+       <script type="text/javascript" src="./scripts/api.js" /></script>
+       <script type="text/javascript">
+        function domReady(fn) {
+            // If we're early to the party
+            document.addEventListener("DOMContentLoaded", fn);
+            // If late; I mean on time.
+            if (document.readyState === "interactive" || document.readyState === "complete" ) {
+                fn();
+            }
+        }
+       
+        domReady(()=>{console.log(ApiService.logIn('lalala','000000000'))})
+       </script>
+    </body>    
+</html>
