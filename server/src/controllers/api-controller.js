@@ -14,6 +14,17 @@ const ApiController = {
         try {
             
             const list = await LoginModel.getActives();
+            // console.log(list)
+            res.status(200).send({list});
+        } catch (err) {
+            console.error(err)
+            res.status(500).send(err);
+        } 
+      },
+      getDetails: async (req, res, next) => {
+        try {
+            
+            const list = await LoginModel.getDetails(req.body.user_id);
             console.log(list)
             res.status(200).send({list});
         } catch (err) {

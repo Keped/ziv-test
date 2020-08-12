@@ -65,4 +65,14 @@ router.post(ROUTES.ACTIVE_LIST, [
       }
   }
 );
+router.post(ROUTES.DETAILS, [
+    header('client_token').exists(),
+    body('user_id').exists()
+  ], async (req, res, next) => {
+      if(!doValidate(req, res)) {
+          return await ApiController.getDetails(req,res,next);
+      }
+  }
+);
+
 module.exports = router;  

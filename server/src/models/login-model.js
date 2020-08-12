@@ -12,6 +12,17 @@ const loginSchema = new Schema({
     createdAt: Date,
     active:Boolean
 });
+loginSchema.statics.getDetails = async function(userId){
+  const result = await this.find({'user':userId},null,{limit:2}).populate('user').exec();
+  console.log(result)
+  return result.map(
+      (loginData)=>{
+        
+        let {_doc,user} = loginData;
+        user = user?user.toJSON():false;
+        return {..._doc, user};
+  });
+}
 
 loginSchema.statics.getActives = async function(){
     const result = await this.find({active:true}).populate('user').exec();
@@ -28,7 +39,7 @@ loginSchema.statics.startLogin = async function (ip,userAgent, user) {
     console.log(user.name)
     try{
       const found = await this.findOne({'user':user._id, active:true}).exec();
-      console.log(found)
+      // console.log(found)
     
       return found;
     }catch(e){
