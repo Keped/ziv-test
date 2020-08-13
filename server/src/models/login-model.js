@@ -23,11 +23,8 @@ const loginSchema = new Schema({
 });
 loginSchema.statics.authenticateForName = async function (name) {
   try {
-    console.log("authenticateForName",name);
     const user = await UserModel.findOne({name}).exec();
-    console.log("user",user);
     const loggedInData = await this.findOne({user,active:true}).exec();
-    console.log(loggedInData);
     return (loggedInData);
   } catch (e) {
     if (!loggedInData) {
@@ -85,7 +82,6 @@ loginSchema.statics.startLogin = async function (ip, userAgent, user) {
     }
     return found;
   } catch (e) {
-
     return this.create({
       ip,
       userAgent,

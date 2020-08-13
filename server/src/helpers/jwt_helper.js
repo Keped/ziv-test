@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken');
 const { ROUTES, ERRORS } = require('../constants');
 const LoginModel = require('../models/login-model');
 
+/**
+ * This service takes care of jwt validations and creation. 
+ */
+
 const {
   AUTHENTICATE, ACTIVE_LIST, DETAILS, LOGOUT,
 } = ROUTES;
@@ -22,15 +26,12 @@ const verifyToken = (token) => {
 // middleware placed in front of candidates model to check token
 // (header existence verified in router)
 const tokenVerifier = async (req, res, next) => {
-  console.log('tokenVerifier',req.url);
 
   if ([AUTHENTICATE, ACTIVE_LIST, DETAILS, LOGOUT].indexOf(req.url) !== -1) {
     try {
       const decoded = verifyToken(req.headers.client_token);
       const foundUser = await LoginModel.authenticateForName(decoded.data);
-      console.log('user found in verifier',req.url,foundUser);
       if (!foundUser) {
-        // console.log('verifier',foundUser);
         res.status(403).send({ error: ERRORS.BAD_TOKEN });
       }
       req.body.userName = decoded.data;
