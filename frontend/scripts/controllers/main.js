@@ -19,7 +19,6 @@ let needChange = true;
 domReady(() => {
   setCurrentTemplate('loading', null);
   checkAuthStatus().then((res) => {
-    // setMainTitle(res)
 
   }).catch((e) => {
     setCurrentTemplate('loginTemplate', null);

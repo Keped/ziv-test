@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
+/**
+ * just connecting to mongo and instantiating mongoose client
+ */
+const path = require('path');
 const { MONGO_PATH } = require('../config');
-
+const MONGO_PREFIX = 'mongodb://';
 mongoose.Promise = global.Promise;
-// TBD ENVIROMENT VARIABLE 'mongodb://localhost/test'
-mongoose.connect('mongodb://elemongo:27017/test', { useNewUrlParser: true });
+
+mongoose.connect(path.join(MONGO_PREFIX, MONGO_PATH), { useNewUrlParser: true });
 const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
   // we're connected!
 });

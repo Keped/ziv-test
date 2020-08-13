@@ -8,7 +8,7 @@ const LoginTemplate = `<form id="loginTemplate" class="auth-form">
     </label>
     <input name="password" id="pass" type="password" autocomplete="current-password"/>
     <span>
-    <input value="Login" onClick="onLoginClicked()"></button>
+    <input value="Login" type="button" onClick="onLoginClicked()"></button>
     <input type="button" value="Go to Signup" onClick="setCurrentTemplate('signupTemplate')"></button>
   </form>`;
 
@@ -26,17 +26,13 @@ Pass
 </label>
 <input id="pass2" type="password" name="password2" autocomplete="new-password"/>
 <span>
-<input value="Sign Up" onClick="onSignupClicked()"/>
+<input type="button" value="Sign Up" onClick="onSignupClicked()"/>
 <input type="button" value="Go to Login" onClick="setCurrentTemplate('loginTemplate')"/>
 </span>
 
 </form>`;
 const makeListTemplate = (list) => `<div id="listTemplate">${list}</div>`;
-
-const setMainTitle = function (message) {
-  const title = document.getElementById('pageTitle');
-  title.innerHTML = message;
-};
+// this box shows signed in user details when relevant
 const setUserBox = function (userData) {
   const titleFound = document.getElementById('detailsFoundTitle');
   const detailsFoundArea = document.getElementById('detailsFoundArea');
@@ -47,6 +43,7 @@ const setUserBox = function (userData) {
     detailsFoundArea.style.visibility = 'hidden';
   }
 };
+// turn the data to a html list
 const createListFromResults = function (resultList) {
   let listView = '<ul>';
   resultList.sort((a, b) => a.counter - b.counter).map((userData) => {
@@ -71,6 +68,7 @@ const createListFromResults = function (resultList) {
   });
   return `${listView}</ul>`;
 };
+// "renderer"
 const setCurrentTemplate = function (templateId, data) {
   const container = document.getElementById('pageContainer');
   let template = LoginTemplate;
@@ -87,6 +85,7 @@ const setCurrentTemplate = function (templateId, data) {
   }
   container.innerHTML = (template);
 };
+// show alert with some user details. data is saved in session storage.
 const showDetails = function (id) {
   const lastResultMap = JSON.parse(StorageService.get(LIST_MAP_TOKEN));
   const userData = lastResultMap[id];
@@ -94,6 +93,7 @@ const showDetails = function (id) {
   const { userAgent } = currentLogin;
   alert(`${currentLogin.user.name}...\n registered since ${currentLogin.user.createdAt}\n${userData.counter} login${userData.counter != 1 ? 's' : ''}\nusing ${userAgent}`);
 };
+// invoke auth.login
 
 const onLoginClicked = function () {
   const nameInput = document.getElementById('name');
@@ -104,13 +104,14 @@ const onLoginClicked = function () {
     }
   });
 };
+// basic validations and invoke auth.signup
 const onSignupClicked = function () {
   const nameInput = document.getElementById('name');
   const passInput = document.getElementById('pass');
   const pass2Input = document.getElementById('pass2');
-  if (passInput.value == pass2Input.value) {
+  if (passInput.value && passInput.value === pass2Input.value) {
     signUp(nameInput.value, passInput.value).then((res) => {
-      if (res) {
+      if (res && !res.errors) {
         alert('signup successful. you can login now');
 
         setCurrentTemplate('loginTemplate');

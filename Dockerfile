@@ -8,5 +8,4 @@ RUN chmod -R 777 /app/static
 # get dependencies
 RUN npm install
 # run the app 
-# CMD [ "npm","start" ]
 CMD [ "/bin/bash","./starter.sh" ]

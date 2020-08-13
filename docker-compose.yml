@@ -9,7 +9,7 @@ services:
     links:
       - elemongo
     environment: 
-      - ELEMENTOR_DB_HOST_PORT='elemongo:27017'
+      - ELEMENTOR_DB_HOST_PORT='elemongo:27017/test'
       - ELEMENTOR_WEB_PORT=8080  
   elemongo:
     container_name: elemongo

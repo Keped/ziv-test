@@ -3,7 +3,7 @@ const { ROUTES, ERRORS } = require('../constants');
 const LoginModel = require('../models/login-model');
 
 /**
- * This service takes care of jwt validations and creation. 
+ * This service takes care of jwt validations and creation.
  */
 
 const {

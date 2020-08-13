@@ -2,7 +2,7 @@
 /* eslint-disable quote-props */
 /**
  * The Login model encapsulates the logic connected with keeping tabs on user activity
- * the main method is "getActives" wichh aggregates login events by user
+ * the main method is "getActives" wich aggregates login events per user
  */
 
 const mongoose = require('./client');

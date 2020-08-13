@@ -1,3 +1,9 @@
+/*
+  This Controller invokes the user model functionality and
+  takes care of returning a new jwt token for successful authorizations.
+  It is assumed that validations and authentications have already happened
+*/
+
 const useragent = require('useragent');
 const UserModel = require('../models/user-model');
 const LoginModel = require('../models/login-model');
@@ -9,12 +15,6 @@ const onAuthSuccessful = (user, res) => {
 
   res.status(200).send({ token, user: user.toJSON() });
 };
-
-/*
-  This Controller invokes the user model functionality and
-  takes care of returning a new jwt token for successful authorizations.
-  It is assumed that validations and authentications have already happened
-*/
 
 const AuthController = {
 
@@ -42,7 +42,6 @@ const AuthController = {
       const { name, password } = req.body; // these have been previously verified
       const user = await UserModel.logIn(name, password);
       const agent = useragent.parse(req.headers['user-agent']);
-      // const IPKEY = 'ip'; // has to be square brackets to work...
       await LoginModel.startLogin(req.connection.remoteAddress || req.ip, agent.toAgent(), user);
       onAuthSuccessful(user, res);
     } catch (err) {

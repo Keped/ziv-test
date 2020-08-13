@@ -1,6 +1,6 @@
 /**
  * User Model
- *
+ * use bcryptjs to hash passwords
  */
 const bcrypt = require('bcryptjs');
 const mongoose = require('./client');
