@@ -101,9 +101,9 @@ loginSchema.statics.startLogin = async function (ip,userAgent, user) {
       if( !found){
         throw("need to create")
       }
-      found.lastUpdatedAt = new Date();
-      await found.save();
-      return found;
+      // found.lastUpdatedAt = new Date();
+      // await found.save();
+      // return found;
     }catch(e){
       // console.error(e)
 
@@ -119,7 +119,7 @@ loginSchema.statics.startLogin = async function (ip,userAgent, user) {
 
 }
 loginSchema.statics.endLogin = async function (user) {
-    return  this.findOneAndUpdate({'user':user._id, active:true}, {active:false}).exec();  
+    return  this.findOneAndUpdate({'user':user._id, active:true}, {active:false, lastUpdatedAt:new Date()}).exec();  
 }
 const Login = mongoose.model('Login', loginSchema);
 module.exports = Login;

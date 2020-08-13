@@ -68,24 +68,24 @@ var showDetails = function (id){
 }
 var createListFromResults = function (resultList){
     let listView = '<ul>';
-    resultList.map((userData)=>{
+    resultList.sort((a,b)=>a.counter - b.counter).map((userData)=>{
         
         const topLogIns = userData.top_logins;
         const currentLogin = topLogIns[0];
         const lastLogin = topLogIns[1];
         let diffTime = Math.abs(new Date()-new Date(currentLogin.createdAt));
+        let lastDiff = lastLogin ? Math.abs(new Date(lastLogin.lastUpdatedAt)  - new Date(lastLogin.createdAt)): '?';
         diffTime = Math.ceil(diffTime / (1000*60));
+        lastDiff =lastDiff != '?' ?  Math.ceil(lastDiff / (1000*60)) : lastDiff;
         if(topLogIns[0].active){
             listView+= `
                 <li>
                     <a href="#" onClick="showDetails('${currentLogin.user._id}')">
-                        <h3>${currentLogin.user.name}</h3>
-                        <h5>Login time: ${diffTime} minute${diffTime > 1? 's' :''}</h5>
-                        <h5>Last update: ${currentLogin.lastUpdated}</h5>
-                        <h5>Last login time: ${lastLogin? lastLogin.createdAt:'N/A'}</h5>
-                        <h5>IP: ${currentLogin.ip}</h5>
+                        <h4>${currentLogin.user.name}</h4>
+                        <h6>Login time minutes (current/last): ${diffTime} / ${lastDiff}</h6>
+                        <h6>Last update: ${currentLogin.lastUpdatedAt }</h6>
+                        <h6>IP: ${currentLogin.ip}</h6>
                     </a>
-                    
                 </li>`;
 
         }
