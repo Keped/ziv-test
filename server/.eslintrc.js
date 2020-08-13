@@ -9,8 +9,9 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 11,
+    esversion: 6,
   },
   rules: {
+    consistentReturn: 0,
   },
-   esversion: 6,
 };

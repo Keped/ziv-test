@@ -19,6 +19,7 @@
     "express-validator": "^6.6.1",
     "jest": "^26.3.0",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.28",
     "supertest": "^4.0.2",
     "useragent": "^2.3.0"
   },

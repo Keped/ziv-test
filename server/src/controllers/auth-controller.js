@@ -6,19 +6,19 @@ const jwtService = require('../helpers/jwt_helper');
 const onAuthSuccessful = (user, res) => {
   // console.log(user)
   const token = jwtService.makeNewToken(user.name);
-  console.log(token);
 
   res.status(200).send({ token, user: user.toJSON() });
 };
 
 /*
-  This Controller invokes the user model functionality and takes care of returning a new jwt token for successful authorizations.
-
+  This Controller invokes the user model functionality and
+  takes care of returning a new jwt token for successful authorizations.
+  It is assumed that validations and authentications have already happened
 */
 
 const AuthController = {
 
-  signUp: async (req, res, next) => {
+  signUp: async (req, res) => {
     try {
       const { name, password } = req.body; // these have been previously verified
       const user = await UserModel.signUp(name, password);
@@ -27,32 +27,28 @@ const AuthController = {
       res.status(400).send('user_exists');
     }
   },
-  logOut: async (req, res, next) => {
+  logOut: async (req, res) => {
     try {
       const name = req.body.userName;
       const user = await UserModel.findOne({ name }).exec();
-      const sessionEnded = await LoginModel.endLogin(user);
-      //  onAuthSuccessful(user, res);
+      await LoginModel.endLogin(user);
       res.status(200).send({ result: 'success' });
     } catch (err) {
-      console.error(err);
       res.status(403).send(err);
     }
   },
-  logIn: async (req, res, next) => {
+  logIn: async (req, res) => {
     try {
       const { name, password } = req.body; // these have been previously verified
       const user = await UserModel.logIn(name, password);
-      // console.log(req.headers)
       const agent = useragent.parse(req.headers['user-agent']);
-      const sessionStarted = await LoginModel.startLogin(req.headers.ip, agent.toAgent(), user);
+      await LoginModel.startLogin(req.headers.ip, agent.toAgent(), user);
       onAuthSuccessful(user, res);
     } catch (err) {
-      console.error(err);
       res.status(403).send(err);
     }
   },
-  authenticate: async (req, res, next) => {
+  authenticate: async (req, res) => {
     try {
       const user = await UserModel.findOne({ name: req.body.userName }).exec();
       onAuthSuccessful(user, res);

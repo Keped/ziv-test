@@ -1,32 +1,33 @@
-const LoginTemplate = `<div id="loginTemplate">
-    <h4>
-        Name:
-    </h4>
-    <input id="name" />
-    <h4>
-        Pass:
-    </h4>
-    <input id="pass" type="password" />
-    <input type="button" value="Login" onClick="onLoginClicked()"></button>
+const LoginTemplate = `<form id="loginTemplate" class="auth-form">
+    <label for="name">
+        Name
+    </label>
+    <input name="username" id="name"  autocomplete="username"/>
+    <label for="password">
+        Pass
+    </label>
+    <input name="password" id="pass" type="password" autocomplete="current-password"/>
+    <span>
+    <input name="submit" type="submit" value="Login" onClick="onLoginClicked()"></button>
     <input type="button" value="Go to Signup" onClick="setCurrentTemplate('signupTemplate')"></button>
-  </div>`;
+  </form>`;
 
-const SignupTemplate = `<div id="loginTemplate">
-<h4>
-    Name:
-</h4>
-<input id="name" />
-<h4>
-    Pass:
-</h4>
-<input id="pass" type="password" />
-<h4>
+const SignupTemplate = `<form id="loginTemplate" class="auth-form">
+<label for="name">
+Name
+</label>
+<input name="username" id="name"  autocomplete="username"/>
+<label for="password">
+Pass
+</label>
+<input id="pass" name="password" type="password" autocomplete="new-password"/>
+<label>
     Confirm Pass:
-</h4>
-<input id="pass2" type="password" />
-<input type="button" value="Sign Up" onClick="onSignupClicked()"></button>
+</label>
+<input id="pass2" type="password" autocomplete="new-password"/>
+<input type="submit" value="Sign Up" onClick="onSignupClicked()"></button>
 <input type="button" value="Go to Login" onClick="setCurrentTemplate('loginTemplate')"></button>
-</div>`;
+</form>`;
 const makeListTemplate = (list) => `<div id="listTemplate">${list}</div>`;
 
 const setMainTitle = function (message) {
@@ -34,16 +35,13 @@ const setMainTitle = function (message) {
   title.innerHTML = message;
 };
 const setUserBox = function (userData) {
-  const titleNotFound = document.getElementById('detailsNotFoundTitle');
   const titleFound = document.getElementById('detailsFoundTitle');
   const detailsFoundArea = document.getElementById('detailsFoundArea');
   if (userData) {
     titleFound.innerHTML = userData.name;
-    detailsFoundArea.style.display = 'flex';
-    titleNotFound.style.display = 'none';
+    detailsFoundArea.style.visibility = 'visible';
   } else {
-    detailsFoundArea.style.display = 'none';
-    titleNotFound.style.display = 'flex';
+    detailsFoundArea.style.visibility = 'hidden';
   }
 };
 const createListFromResults = function (resultList) {

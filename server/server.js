@@ -7,7 +7,7 @@ const { tokenVerifier } = require('./src/helpers/jwt_helper');
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(tokenVerifier); // TBD
+app.use(tokenVerifier);
 app.use(router);
 app.use(express.static('../frontend'));
 // set port, listen for requests, also export for tests

@@ -68,28 +68,6 @@ describe('APIs', () => {
   afterAll(() => {
     server.close();
   });
-  test('details route working', async () => {
-    const result = await request(app)
-      .post(ROUTES.LOGIN)
-      .set('ip', '5.5.5.5.5')
-      .set('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36')
-      .send(MOCK_USER_DATA_ROUTES3)
-      .expect((res) => {
-        // return res
-        res.error && console.log(res.error);
-      })
-      .expect(200);
-    details = await request(app)
-      .post(ROUTES.DETAILS)
-      .send({ user_id: result.body.user._id })
-      .set('client_token', result.body.token)
-      .expect((res) => {
-        res.error && console.log(res.error);
-        // res.body && console.log(res.body)
-      })
-      .expect(200);
-    return expect(details.body.list.length > 0);
-  });
   afterAll(() => {
     server.close();
   });

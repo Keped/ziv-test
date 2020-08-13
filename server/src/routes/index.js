@@ -1,6 +1,6 @@
 /*
     The Routes module takes care of validations on input, and than pass the request to controller.
-
+    This seperates business logic and authentication from initial validation.
 */
 
 const express = require('express');
@@ -14,9 +14,9 @@ const ApiController = require('../controllers/api-controller');
 const doValidate = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.error(req.url, errors.array());
     return res.status(400).json({ errors: errors.array() });
   }
+  return null;
 };
 
 router.get(ROUTES.HEALTH, (req, res, next) => {
@@ -62,13 +62,6 @@ router.post(ROUTES.ACTIVE_LIST, [
 ], async (req, res, next) => {
   if (!doValidate(req, res)) {
     return ApiController.getList(req, res, next);
-  }
-});
-router.post(ROUTES.DETAILS, [
-  header('client_token').exists(),
-], async (req, res, next) => {
-  if (!doValidate(req, res)) {
-    return await ApiController.getDetails(req, res, next);
   }
 });
 

@@ -22,11 +22,10 @@ ul > li {
 }
 ul > li:hover {
     border: 2px solid black;
-
+    padding: 9px 10px;
 }
 
 body {
-    font-size: 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -38,9 +37,29 @@ div.user-details {
     top:1%;
     width:150px;
     height:100px;
+    
 }
+form.auth-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px;
+    width: 380px;
+    align-items: stretch;
+    text-align: center;
+}
+form.auth-form span input{
+    background-color: transparent;
+    border: none;
+    font-family: Roboto;
+    font-size: 20px;
 
+}
+form.auth-form span input:hover {
+    cursor: pointer;
+}
 div.user-details>h5{
+    visibility: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -15,21 +15,20 @@ const makeNewToken = (name) => jwt.sign({
 JWT_SECRET);
 
 const verifyToken = (token) => {
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    return decoded;
-  } catch (err) {
-    throw (err);
-  }
+  const decoded = jwt.verify(token, JWT_SECRET);
+  return decoded;
 };
 
-// middleware placed in front of candidates model to check token (header existence verified in router)
+// middleware placed in front of candidates model to check token
+// (header existence verified in router)
 const tokenVerifier = async (req, res, next) => {
-  if ([AUTHENTICATE, ACTIVE_LIST, DETAILS, LOGOUT].indexOf(req.url) != -1) {
+  console.log('tokenVerifier',req.url);
+
+  if ([AUTHENTICATE, ACTIVE_LIST, DETAILS, LOGOUT].indexOf(req.url) !== -1) {
     try {
       const decoded = verifyToken(req.headers.client_token);
       const foundUser = await LoginModel.authenticateForName(decoded.data);
-      // console.log('user found in verifier',req.url,foundUser);
+      console.log('user found in verifier',req.url,foundUser);
       if (!foundUser) {
         // console.log('verifier',foundUser);
         res.status(403).send({ error: ERRORS.BAD_TOKEN });

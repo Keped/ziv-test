@@ -1,3 +1,10 @@
+/* eslint-disable quotes */
+/* eslint-disable quote-props */
+/**
+ * The Login model encapsulates the logic connected with keeping tabs on user activity
+ * the main method is "getActives" wichh aggregates login events by user
+ */
+
 const mongoose = require('./client');
 const UserModel = require('./user-model');
 
@@ -16,8 +23,10 @@ const loginSchema = new Schema({
 });
 loginSchema.statics.authenticateForName = async function (name) {
   try {
-    const user = await UserModel.findOne({ name }).exec();
-    const loggedInData = await this.findOne({ user, active: true }).exec();
+    console.log("authenticateForName",name);
+    const user = await UserModel.findOne({name}).exec();
+    console.log("user",user);
+    const loggedInData = await this.findOne({user,active:true}).exec();
     console.log(loggedInData);
     return (loggedInData);
   } catch (e) {
@@ -26,74 +35,56 @@ loginSchema.statics.authenticateForName = async function (name) {
     }
   }
 };
-loginSchema.statics.getDetails = async function (userId) {
-  const result = await this.find({ user: userId }, null, { limit: 2 }).populate('user').exec();
-  console.log(result);
-  return result.map(
-    (loginData) => {
-      let { _doc, user } = loginData;
-      user = user ? user.toJSON() : false;
-      return { ..._doc, user };
-    },
-  );
-};
 
 loginSchema.statics.getActives = async function () {
   const pipeline = [
 
     {
-      $sort: { _id: -1 },
+      "$sort": { "_id": -1 },
     },
     {
-      $lookup: {
-        from: 'users',
-        localField: 'user',
-        foreignField: '_id',
-        as: 'user',
+      "$lookup": {
+        "from": "users",
+        "localField": "user",
+        "foreignField": "_id",
+        "as": "user",
       },
     },
     {
-      $unwind: '$user',
+      "$unwind": "$user",
     },
     {
-      $group: {
-        _id: '$user._id',
-        counter: { $sum: 1 },
-        logins: {
-          $push: '$$ROOT',
+      "$group": {
+        "_id": "$user._id",
+        "counter": { "$sum": 1 },
+        "logins": {
+          "$push": "$$ROOT",
         },
       },
     },
 
     {
-      $project:
+      "$project":
           {
-            top_logins:
+            "top_logins":
               {
-                $slice: ['$logins', 3],
+                "$slice": ["$logins", 3],
               },
-            counter: '$counter',
+            "counter": "$counter",
           },
     },
   ];
-  const result = await this.aggregate(pipeline).exec();
-
-  return result;
+  return this.aggregate(pipeline).exec();
 };
-
+// create a login event if neccesary
 loginSchema.statics.startLogin = async function (ip, userAgent, user) {
-  console.log(user.name);
   try {
     const found = await this.findOne({ user: user._id, active: true }).exec();
-    // console.log(found)
     if (!found) {
       throw ('need to create');
     }
-    // found.lastUpdatedAt = new Date();
-    // await found.save();
-    // return found;
+    return found;
   } catch (e) {
-    // console.error(e)
 
     return this.create({
       ip,
@@ -105,6 +96,8 @@ loginSchema.statics.startLogin = async function (ip, userAgent, user) {
     });
   }
 };
+
+// create a login event if neccesary
 loginSchema.statics.endLogin = async function (user) {
   const newData = { active: false, lastUpdatedAt: new Date() };
   return this.findOneAndUpdate({ user: user._id, active: true }, newData).exec();
