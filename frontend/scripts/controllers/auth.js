@@ -4,7 +4,8 @@ const onUnAuthorized = function () {
   appState.status = 'authorized';
   appState.user = null;
   setUserBox(false);
-  return 'oh oh ';
+  setCurrentTemplate('loginTemplate');
+  return false;
 };
 const onAuthorized = function (token, user) {
   StorageService.set(TAB_SESSION_TOKEN, token);

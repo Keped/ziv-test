@@ -46,26 +46,7 @@ const setUserBox = function (userData) {
     titleNotFound.style.display = 'flex';
   }
 };
-const setCurrentTemplate = function (templateId, data) {
-  const container = document.getElementById('pageContainer');
-  let template = LoginTemplate;
-  if (templateId == 'signupTemplate') {
-    template = SignupTemplate;
-  }
-  if (templateId == 'listTemplate') {
-    const listView = createListFromResults(data);
-    template = makeListTemplate(listView);
-  }
-  container.innerHTML = template;
-};
-const showDetails = function (id) {
-  const lastResultMap = JSON.parse(StorageService.get(LIST_MAP_TOKEN));
-  const userData = lastResultMap[id];
-  const currentLogin = userData.top_logins[0];
-  const { userAgent } = currentLogin;
-  alert(`${currentLogin.user.name}...\n registered since ${currentLogin.user.createdAt}\n${userData.counter} login${userData.counter != 1 ? 's' : ''}\nusing ${userAgent}`);
-};
-var createListFromResults = function (resultList) {
+const createListFromResults = function (resultList) {
   let listView = '<ul>';
   resultList.sort((a, b) => a.counter - b.counter).map((userData) => {
     const topLogIns = userData.top_logins;
@@ -89,12 +70,37 @@ var createListFromResults = function (resultList) {
   });
   return `${listView}</ul>`;
 };
+const setCurrentTemplate = function (templateId, data) {
+  const container = document.getElementById('pageContainer');
+  let template = LoginTemplate;
+  if (templateId === 'signupTemplate') {
+    template = SignupTemplate;
+  }
+  if (templateId === 'listTemplate') {
+    const listView = createListFromResults(data);
+    template = makeListTemplate(listView);
+  }
+  if (templateId === 'loading') {
+    template = '<h6 class="spinning">Loading</h6>';
+    container.innerHTML = template;
+  }
+  container.innerHTML = (template);
+};
+const showDetails = function (id) {
+  const lastResultMap = JSON.parse(StorageService.get(LIST_MAP_TOKEN));
+  const userData = lastResultMap[id];
+  const currentLogin = userData.top_logins[0];
+  const { userAgent } = currentLogin;
+  alert(`${currentLogin.user.name}...\n registered since ${currentLogin.user.createdAt}\n${userData.counter} login${userData.counter != 1 ? 's' : ''}\nusing ${userAgent}`);
+};
 
 const onLoginClicked = function () {
   const nameInput = document.getElementById('name');
   const passInput = document.getElementById('pass');
   logIn(nameInput.value, passInput.value).then((res) => {
-
+    if (res) {
+      setCurrentTemplate('loading');
+    }
   });
 };
 const onSignupClicked = function () {
@@ -111,3 +117,7 @@ const onSignupClicked = function () {
     });
   }
 };
+// GuiService = {
+//     setCurrentTemplate,
+
+// }

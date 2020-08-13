@@ -22,7 +22,7 @@ loginSchema.statics.authenticateForName = async function (name) {
     return (loggedInData);
   } catch (e) {
     if (!loggedInData) {
-      throw ('NOT FOUND IN LIGUNS');
+      throw ('NOT FOUND IN LOGINS');
     }
   }
 };
@@ -38,18 +38,7 @@ loginSchema.statics.getDetails = async function (userId) {
   );
 };
 
-// loginSchema.statics.getActives = async function(){
-//   const result = await this.find({active:true}).populate('user').exec();
-//   return result.map(
-//       (loginData)=>{
-
-//         let {_doc,user} = loginData;
-//         user = user?user.toJSON():false;
-//         return {..._doc, user};
-//   });
-// }
 loginSchema.statics.getActives = async function () {
-  // const result = await this.find({active:true}).populate('user').exec();
   const pipeline = [
 
     {
@@ -117,7 +106,8 @@ loginSchema.statics.startLogin = async function (ip, userAgent, user) {
   }
 };
 loginSchema.statics.endLogin = async function (user) {
-  return this.findOneAndUpdate({ user: user._id, active: true }, { active: false, lastUpdatedAt: new Date() }).exec();
+  const newData = { active: false, lastUpdatedAt: new Date() };
+  return this.findOneAndUpdate({ user: user._id, active: true }, newData).exec();
 };
 const Login = mongoose.model('Login', loginSchema);
 module.exports = Login;

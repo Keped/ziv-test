@@ -40,16 +40,14 @@
             }
             return false; 
         }
-       var templateName = "loginTemplate";
         let needChange = true;
         domReady(()=>{
             checkAuthStatus().then((res)=>{
                     // setMainTitle(res)
 
                 })
-            setCurrentTemplate(templateName)
+            setCurrentTemplate("loginTemplate", null)
             setInterval(function(){
-                // console.log(appState)
                 
                 const token = StorageService.get(TAB_SESSION_TOKEN);
                 const lastResultMap = StorageService.get(LIST_MAP_TOKEN);

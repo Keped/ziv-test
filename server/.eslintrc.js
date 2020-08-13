@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    browser: true,
+    browser: false,
     commonjs: true,
     es2020: true,
   },
@@ -12,4 +12,5 @@ module.exports = {
   },
   rules: {
   },
+   esversion: 6,
 };
