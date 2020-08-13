@@ -1,8 +1,13 @@
 .elementor-test a,div,span,p,h1,h2,h3,h4,h5,h6{
     color:black!important;
-    text-decoration: none!important;
+   
     font-family: 'Roboto', sans-serif;
 }
+
+ul > li a{
+    text-decoration: none!important;
+}
+
 ul > li {
     list-style: none;
     display: flex; 

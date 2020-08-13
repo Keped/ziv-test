@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+
 mongoose.Promise = global.Promise;
 // TBD ENVIROMENT VARIABLE
-mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true });
 const db = mongoose.connection;
 // db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
+db.once('open', () => {
   // we're connected!
 });
 module.exports = mongoose;

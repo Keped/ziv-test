@@ -21,5 +21,10 @@
     "jsonwebtoken": "^8.5.1",
     "supertest": "^4.0.2",
     "useragent": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
   }
 }
