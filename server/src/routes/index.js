@@ -14,7 +14,7 @@ const ApiController = require('../controllers/api-controller');
 const doValidate = (req, res) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        // console.log(req.url,errors.array())
+        console.error(req.url,errors.array())
       return res.status(400).json({ errors: errors.array() });
     }
 }
@@ -39,11 +39,18 @@ router.post(ROUTES.SIGNUP, [
     }
   }
 );
-
+router.post(ROUTES.LOGOUT, [
+    header('client_token').exists(),
+  ], async (req, res, next) => {
+      if(!doValidate(req, res)) {
+          return AuthController.logOut(req,res,next);
+      }
+  }
+);
 router.post(ROUTES.LOGIN, [
       body('password').isLength({ min: 6 }),
       body('name').exists()
-    ], async (req, res, next) => {
+    ],  (req, res, next) => {
         if(!doValidate(req, res)) {
             return AuthController.logIn(req,res,next);
         }
@@ -53,7 +60,8 @@ router.post(ROUTES.AUTHENTICATE, [
     header('client_token').exists()
   ], async (req, res, next) => {
       if(!doValidate(req, res)) {
-          return await AuthController.authenticate(req,res,next);
+          
+          return  AuthController.authenticate(req,res,next);
       }
   }
 );
@@ -61,13 +69,12 @@ router.post(ROUTES.ACTIVE_LIST, [
     header('client_token').exists()
   ], async (req, res, next) => {
       if(!doValidate(req, res)) {
-          return await ApiController.getList(req,res,next);
+          return   ApiController.getList(req,res,next);
       }
   }
 );
 router.post(ROUTES.DETAILS, [
-    header('client_token').exists(),
-    body('user_id').exists()
+    header('client_token').exists()
   ], async (req, res, next) => {
       if(!doValidate(req, res)) {
           return await ApiController.getDetails(req,res,next);

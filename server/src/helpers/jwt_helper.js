@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { ROUTES, ERRORS } = require('../constants');
-const {AUTHENTICATE, ACTIVE_LIST} = ROUTES;
+const LoginModel = require('../models/login-model');
+const {AUTHENTICATE, ACTIVE_LIST, DETAILS, LOGOUT} = ROUTES;
 const JWT_SECRET = "TODO MOVE TO ENVE";
 // taking care of jwt ops
 
@@ -22,19 +23,26 @@ const verifyToken = (token) => {
 }
 
 // middleware placed in front of candidates model to check token (header existence verified in router)
-const tokenVerifier = (req,res,next) => {
-    if([AUTHENTICATE, ACTIVE_LIST].indexOf(req.url) != -1 ){
+const tokenVerifier = async (req,res,next) => {
+
+    if([AUTHENTICATE, ACTIVE_LIST, DETAILS, LOGOUT].indexOf(req.url) != -1 ){
         try{
 
-            const decoded = verifyToken(req.headers.client_token);
-
-            req.body.nameFromAuth = decoded.data;
+            const decoded = verifyToken(req.headers['client_token']);
+            const foundUser = await LoginModel.authenticateForName(decoded.data);
+            // console.log('user found in verifier',req.url,foundUser);
+            if(!foundUser ){
+                // console.log('verifier',foundUser);
+                res.status(403).send({error:ERRORS.BAD_TOKEN});
+            }
+            req.body.userName = decoded.data;
             next();
         }catch(e){
 
-            res.status(403).send(ERRORS.BAD_TOKEN);
+            res.status(403).send({error:ERRORS.BAD_TOKEN});
         }
     }else{
+        
         next();
     }
 };

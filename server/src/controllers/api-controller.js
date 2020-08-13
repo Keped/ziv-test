@@ -5,16 +5,14 @@ const LoginModel = require('../models/login-model');
   
 /* 
   This Controller serves logins data
-
 */
 
 const ApiController = {
   
     getList: async (req, res, next) => {
         try {
-            
+
             const list = await LoginModel.getActives();
-            // console.log(list)
             res.status(200).send({list});
         } catch (err) {
             console.error(err)
@@ -23,7 +21,7 @@ const ApiController = {
       },
       getDetails: async (req, res, next) => {
         try {
-            
+           
             const list = await LoginModel.getDetails(req.body.user_id);
             console.log(list)
             res.status(200).send({list});

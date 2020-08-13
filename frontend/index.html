@@ -3,10 +3,24 @@
         <link rel="stylesheet" type="text/css" href="./style/general.css">
     </head>
     <body class="elementor-test">
-       <h1 id="pageTitle">YO</h1> 
+       <h1 id="pageTitle">YO</h1>
+       <div class="user-details">
+            <h5 id="detailsNotFoundTitle">
+                You are offline
+            </h5>
+            <h5 id="detailsFoundArea">
+                <span id="detailsFoundTitle"></span>
+                <br/>
+                <a href="#" onClick="logOut()">Disconnect</a>
+            </h5>
+
+       </div> 
+       <div id="pageContainer"></div>
        <script type="text/javascript" src="./scripts/constants.js" ></script>
-       <script type="text/javascript" src="./scripts/api.js" /></script>
-       <script type="text/javascript" src="./scripts/gui.js" /></script>
+       <script type="text/javascript" src="./scripts/services/api.js" /></script>
+       <script type="text/javascript" src="./scripts/services/store.js" /></script>
+       <script type="text/javascript" src="./scripts/services/gui.js" /></script>
+       <script type="text/javascript" src="./scripts/controllers/auth.js" /></script>
        <script type="text/javascript">
         function domReady(fn) {
             // If we're early to the party
@@ -16,17 +30,54 @@
                 fn();
             }
         }
-       
+        const serialize = function(obj){
+            return JSON.stringify(obj, Object.keys(obj).sort());
+        }
+        const compareLists = function(a,b){
+            if(a && b){
+                return serialize(a) === serialize(b);
+            }
+            return false; 
+        }
+       var templateName = "loginTemplate";
+        let needChange = true;
         domReady(()=>{
-        
-                ApiService.logIn('lalala','000000000').then((res)=>{
-                    console.log(res)
-                    res.error && setMainTitle(res.error)
+            checkAuthStatus().then((res)=>{
+                    // setMainTitle(res)
 
-                }).catch((e)=>{
-                    setMainTitle(e)
                 })
+            setCurrentTemplate(templateName)
+            setInterval(function(){
+                // console.log(appState)
+                
+                const token = StorageService.get(TAB_SESSION_TOKEN);
+                const lastResultMap = StorageService.get(LIST_MAP_TOKEN);
+                if(token && token !== 'null'){
+                    console.log(token + " !!!!!!!!!!!")
+                    ApiService.getList(token).then((res)=>{
+                  
+                        needChange = false;
+                        let newMap = {};
+                        res.list.map((loginData)=>{
+                            // if(typeof(lastResultMap[loginData._id]) == 'undefined'){
+                            //     needChange = true;
+                            // }
+                            newMap[loginData._id] = loginData;
+                        });
+                        StorageService.set(LIST_MAP_TOKEN,JSON.stringify(newMap));
+                        if (compareLists(newMap,JSON.parse(lastResultMap))) { 
+                            setCurrentTemplate("listTemplate", res.list);
+                        }
+                            
+                    });
+                } 
+            },30*100)
             
+            // logIn('models1','adminadmin2').then((res)=>{
+            //     res && console.log(res)
+            // }).catch((e)=>{
+            //     // setMainTitle(e)
+            // })
         })
        </script>
     </body>    

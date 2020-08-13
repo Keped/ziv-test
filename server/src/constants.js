@@ -4,7 +4,8 @@ module.exports.ROUTES = {
     LOGIN:  '/login',
     AUTHENTICATE:   '/auth',
     ACTIVE_LIST:'/currently_logged_in',
-    DETAILS:'/user_details'
+    DETAILS:'/user_details',
+    LOGOUT:'/logout'
 }
 module.exports.ERRORS = {
     SIGNUP_USERNAME_EXISTS: 'user_exists',

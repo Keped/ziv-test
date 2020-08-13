@@ -30,7 +30,18 @@ const AuthController = {
             res.status(400).send("user_exists")
         }
     },
-    
+    logOut: async (req, res, next) => {
+      try {
+        const name = req.body.userName;
+        const user = await UserModel.findOne({name}).exec();
+        const sessionEnded = await LoginModel.endLogin(user);
+        //  onAuthSuccessful(user, res);
+        res.status(200).send({result:'success'})
+      } catch (err) {
+        console.error(err)
+        res.status(403).send(err)
+      } 
+    },
     logIn: async (req, res, next) => {
       try {
         const {name, password} = req.body; // these have been previously verified
@@ -46,9 +57,7 @@ const AuthController = {
     },
     authenticate: async (req, res, next) => {
         try {
-            console.log(req.body.nameFromAuth)
-            const user = await UserModel.findOne({name: req.body.nameFromAuth}).exec();
-            const loggedIn = await LoginModel.findOne({user,active:true}).exec();
+            const user = await UserModel.findOne({name:req.body.userName}).exec()
             onAuthSuccessful(user, res);
         } catch (err) {
             res.status(403).send(err);
