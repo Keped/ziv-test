@@ -42,7 +42,8 @@ const AuthController = {
       const { name, password } = req.body; // these have been previously verified
       const user = await UserModel.logIn(name, password);
       const agent = useragent.parse(req.headers['user-agent']);
-      await LoginModel.startLogin(req.headers.ip, agent.toAgent(), user);
+      // const IPKEY = 'ip'; // has to be square brackets to work...
+      await LoginModel.startLogin(req.connection.remoteAddress || req.ip, agent.toAgent(), user);
       onAuthSuccessful(user, res);
     } catch (err) {
       res.status(403).send(err);

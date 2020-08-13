@@ -34,9 +34,6 @@ domReady(() => {
         needChange = false;
         const newMap = {};
         res.list.map((loginData) => {
-          // if(typeof(lastResultMap[loginData._id]) == 'undefined'){
-          //     needChange = true;
-          // }
           newMap[loginData._id] = loginData;
         });
         StorageService.set(LIST_MAP_TOKEN, JSON.stringify(newMap));
@@ -47,9 +44,4 @@ domReady(() => {
     }
   }, 30 * 100);
 
-  // logIn('models1','adminadmin2').then((res)=>{
-  //     res && console.log(res)
-  // }).catch((e)=>{
-  //     // setMainTitle(e)
-  // })
 });

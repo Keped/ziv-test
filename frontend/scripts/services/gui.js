@@ -8,11 +8,11 @@ const LoginTemplate = `<form id="loginTemplate" class="auth-form">
     </label>
     <input name="password" id="pass" type="password" autocomplete="current-password"/>
     <span>
-    <input name="submit" type="submit" value="Login" onClick="onLoginClicked()"></button>
+    <input value="Login" onClick="onLoginClicked()"></button>
     <input type="button" value="Go to Signup" onClick="setCurrentTemplate('signupTemplate')"></button>
   </form>`;
 
-const SignupTemplate = `<form id="loginTemplate" class="auth-form">
+const SignupTemplate = `<form id="signupTemplate" class="auth-form">
 <label for="name">
 Name
 </label>
@@ -21,12 +21,15 @@ Name
 Pass
 </label>
 <input id="pass" name="password" type="password" autocomplete="new-password"/>
-<label>
+<label for="password2">
     Confirm Pass:
 </label>
-<input id="pass2" type="password" autocomplete="new-password"/>
-<input type="submit" value="Sign Up" onClick="onSignupClicked()"></button>
-<input type="button" value="Go to Login" onClick="setCurrentTemplate('loginTemplate')"></button>
+<input id="pass2" type="password" name="password2" autocomplete="new-password"/>
+<span>
+<input value="Sign Up" onClick="onSignupClicked()"/>
+<input type="button" value="Go to Login" onClick="setCurrentTemplate('loginTemplate')"/>
+</span>
+
 </form>`;
 const makeListTemplate = (list) => `<div id="listTemplate">${list}</div>`;
 
