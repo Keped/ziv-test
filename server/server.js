@@ -13,7 +13,8 @@ app.use(tokenVerifier);
 // RESTful APIs
 app.use(router);
 // Static files
-app.use(express.static(path.join(__dirname, './static')));
+app.use(express.static(path.join(__dirname, '../frontend')));
+// app.use(express.static(path.join(__dirname, './static')));
 
 // set port, listen for requests, also export for tests
 // export the app itself so we can e2e

@@ -43,28 +43,29 @@ const setUserBox = function (userData) {
     detailsFoundArea.style.visibility = 'hidden';
   }
 };
+
 // turn the data to a html list
-const createListFromResults = function (resultList) {
+const createListFromResults = (list) => {
   let listView = '<ul>';
-  resultList.sort((a, b) => a.counter - b.counter).map((userData) => {
-    const topLogIns = userData.top_logins;
-    const currentLogin = topLogIns[0];
-    const lastLogin = topLogIns[1];
-    let diffTime = Math.abs(new Date() - new Date(currentLogin.createdAt));
-    let lastDiff = lastLogin ? Math.abs(new Date(lastLogin.lastUpdatedAt) - new Date(lastLogin.createdAt)) : '?';
-    diffTime = Math.ceil(diffTime / (1000 * 60));
-    lastDiff = lastDiff != '?' ? Math.ceil(lastDiff / (1000 * 60)) : lastDiff;
-    if (topLogIns[0].active) {
-      listView += `
-                <li>
-                    <a href="#" onClick="showDetails('${currentLogin.user._id}')">
-                        <h4>${currentLogin.user.name}</h4>
-                        <h6>Login time minutes (current/last): ${diffTime} / ${lastDiff}</h6>
-                        <h6>Last update: ${currentLogin.lastUpdatedAt}</h6>
-                        <h6>IP: ${currentLogin.ip}</h6>
-                    </a>
-                </li>`;
-    }
+  list.sort((a, b) => a.counter - b.counter).map((userData) => {
+    const {
+      name,
+      userId,
+      currentMinutes,
+      lastUpdateTime,
+      ip,
+      lastMinutes
+    } = userData;
+
+    listView += `
+      <li>
+          <a href="#" onClick="showDetails('${userId}')">
+              <h4>${name}</h4>
+              <h6>Login time minutes (current/last): ${currentMinutes} / ${lastMinutes}</h6>
+              <h6>Last update: ${lastUpdateTime.toLocaleString()}</h6>
+              <h6>IP: ${ip}</h6>
+          </a>
+      </li>`;
   });
   return `${listView}</ul>`;
 };
@@ -86,22 +87,22 @@ const setCurrentTemplate = function (templateId, data) {
   container.innerHTML = (template);
 };
 // show alert with some user details. data is saved in session storage.
-const showDetails = function (id) {
+const showDetails = (id) => {
   const lastResultMap = JSON.parse(StorageService.get(LIST_MAP_TOKEN));
   const userData = lastResultMap[id];
-  const currentLogin = userData.top_logins[0];
-  const { userAgent } = currentLogin;
-  alert(`${currentLogin.user.name}...\n registered since ${currentLogin.user.createdAt}\n${userData.counter} login${userData.counter != 1 ? 's' : ''}\nusing ${userAgent}`);
+  const { userAgent, counter, name, createdAt } = userData;
+  alert(`${name}...\n registered since ${createdAt.toLocaleString()}\n${counter} login${counter != 1 ? 's' : ''}\nusing ${userAgent}`);
 };
-// invoke auth.login
-
+// invoke auth.login to perform action
 const onLoginClicked = function () {
   const nameInput = document.getElementById('name');
   const passInput = document.getElementById('pass');
+  setCurrentTemplate('loading');
   logIn(nameInput.value, passInput.value).then((res) => {
-    if (res) {
-      setCurrentTemplate('loading');
-    }
+    //
+  }).catch(()=>{
+    alert('login failed!');
+    setCurrentTemplate('loginTemplate');
   });
 };
 // basic validations and invoke auth.signup
@@ -113,7 +114,6 @@ const onSignupClicked = function () {
     signUp(nameInput.value, passInput.value).then((res) => {
       if (res && !res.errors) {
         alert('signup successful. you can login now');
-
         setCurrentTemplate('loginTemplate');
       }
     });

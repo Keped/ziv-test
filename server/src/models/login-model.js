@@ -16,6 +16,7 @@ const loginSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: UserModel.modelName,
+    index: true,
   },
   ip: String,
   userAgent: String,
@@ -23,24 +24,15 @@ const loginSchema = new Schema({
   lastUpdatedAt: Date,
   active: Boolean,
 });
-loginSchema.statics.authenticateForName = async function (name) {
-  try {
-    const user = await UserModel.findOne({ name }).exec();
-    const loggedInData = await this.findOne({ user, active: true }).exec();
-    return (loggedInData);
-  } catch (e) {
-    throw new Error('NOT FOUND IN LOGINS');
-  }
-};
 
 loginSchema.statics.getActives = async function () {
+  // bucket aggregation of two latest logins per logged in user
   const pipeline = [
-
     {
-      "$sort": { "_id": -1 },
+      "$sort": { "_id": -1 }, // do fifo on all data
     },
     {
-      "$lookup": {
+      "$lookup": { // necessary for grouping by a reference to user
         "from": "users",
         "localField": "user",
         "foreignField": "_id",
@@ -51,21 +43,24 @@ loginSchema.statics.getActives = async function () {
       "$unwind": "$user",
     },
     {
+      "$match": { "user.isLoggedIn": true }, // only want online ones
+    },
+    {
       "$group": {
         "_id": "$user._id",
-        "counter": { "$sum": 1 },
+        "counter": { "$sum": 1 }, // count when we still have all
         "logins": {
-          "$push": "$$ROOT",
+          "$push": "$$ROOT", // push for projection
         },
       },
     },
 
     {
-      "$project":
+      "$project": // show top two + counter
           {
             "top_logins":
               {
-                "$slice": ["$logins", 3],
+                "$slice": ["$logins", 2],
               },
             "counter": "$counter",
           },

@@ -6,41 +6,61 @@ function domReady(fn) {
     fn();
   }
 }
-const serialize = function (obj) {
-  return JSON.stringify(obj, Object.keys(obj).sort());
-};
-const compareLists = function (a, b) {
+
+const compareLists = (a, b) => {
+  // let equal
   if (a && b) {
-    return serialize(a) === serialize(b);
+    return serializeObjectArray(a) === serializeObjectArray(b);
   }
   return false;
 };
-let needChange = true;
-domReady(() => {
-  setCurrentTemplate('loading', null);
-  checkAuthStatus().then((res) => {
 
+const flattenMapToArray = (obj) => Object.keys(obj).map(k=>obj[k]);
+// trying to save rendering work
+const serializeObjectArray = (dataMap) =>  {
+  const objectsArr = [...dataMap].sort();
+  let result = '';
+  objectsArr.forEach((obj)=>{
+    result += JSON.stringify(obj, Object.keys(obj).sort());
+  });
+  return result;
+};
+
+// this is our app startup
+domReady(() => {
+  // show spinner
+  setCurrentTemplate('loading', null);
+  // checked if logged in in the server
+  checkAuthStatus().then((res) => {
   }).catch((e) => {
+    // login expired or never was
     setCurrentTemplate('loginTemplate', null);
   });
-
+  // initialize storage so we don't have hangovers
+  StorageService.set(LIST_MAP_TOKEN, {});
   setInterval(() => {
+    // if we have a token (cached from before page refresh of new from /auth/login) 
+    // we can try to get data
     const token = StorageService.get(TAB_SESSION_TOKEN);
-    const lastResultMap = StorageService.get(LIST_MAP_TOKEN);
     if (token && token !== 'null') {
-      console.log(`${token} !!!!!!!!!!!`);
+      // go for data from server
       ApiService.getList(token).then((res) => {
-        needChange = false;
-        const newMap = {};
-        res.list.map((loginData) => {
-          newMap[loginData._id] = loginData;
-        });
-        StorageService.set(LIST_MAP_TOKEN, JSON.stringify(newMap));
-        if (compareLists(newMap, JSON.parse(lastResultMap))) {
-          setCurrentTemplate('listTemplate', res.list);
+        // have we got it?
+        const { resultList } = res;
+        if (!resultList) {
+          return;
+        }
+        // get map from storage for comparison
+        let lastResultMap = StorageService.get(LIST_MAP_TOKEN);
+        lastResultMap = lastResultMap ? JSON.parse(lastResultMap) : false;
+        // save for the same usage
+        StorageService.set(LIST_MAP_TOKEN, JSON.stringify(resultList));
+        // make list for easier comparison and rendering
+        const resultArray = flattenMapToArray(resultList);
+        if (!lastResultMap || !compareLists(resultArray, flattenMapToArray(lastResultMap))) {
+          setCurrentTemplate('listTemplate', resultArray); // render!
         }
       });
     }
   }, 30 * 100);
-
 });
