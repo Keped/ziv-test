@@ -25,12 +25,12 @@ describe('LOGIN MODEL', () => {
     const found = await LoginModel.findOne({ user, active: true });
     expect(found.userAgent).toEqual('CHROME');
     await LoginModel.endLogin(user);
-    const noUser = true;
+    let noUser = true;
     try {
       noUser = await LoginModel.findOne({ user, active: true });
     } catch (e) {
-
+    //
     }
-    expect(noUser).toEqual(true);
+    expect(noUser).toEqual(null);
   });
 });

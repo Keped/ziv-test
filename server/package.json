@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --testTimeout=100 --detectOpenHandles",
+    "test": "jest --coverage --testTimeout=1000 --detectOpenHandles --watch",
     "start": "node server.js"
   },
   "author": "Ziv Taller",
@@ -26,6 +26,23 @@
   "devDependencies": {
     "eslint": "^7.6.0",
     "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.0"
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.20.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "*.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 10,
+        "functions": 10,
+        "lines": 10,
+        "branches":0
+      }
+    }
   }
 }

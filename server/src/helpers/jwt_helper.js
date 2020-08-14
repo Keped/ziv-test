@@ -26,7 +26,6 @@ const verifyToken = (token) => {
 // middleware placed in front of candidates model to check token
 // (header existence verified in router)
 const tokenVerifier = async (req, res, next) => {
-
   if ([AUTHENTICATE, ACTIVE_LIST, DETAILS, LOGOUT].indexOf(req.url) !== -1) {
     try {
       const decoded = verifyToken(req.headers.client_token);

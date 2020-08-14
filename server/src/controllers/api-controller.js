@@ -13,6 +13,6 @@ const ApiController = {
     } catch (err) {
       res.status(500).send(err);
     }
-  }
+  },
 };
 module.exports = ApiController;

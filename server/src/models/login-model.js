@@ -1,8 +1,10 @@
 /* eslint-disable quotes */
 /* eslint-disable quote-props */
+/* eslint-disable no-underscore-dangle */
 /**
  * The Login model encapsulates the logic connected with keeping tabs on user activity
  * the main method is "getActives" wich aggregates login events per user
+ * lint is configured to ignore some things that are required by/default in Mongo
  */
 
 const mongoose = require('./client');
@@ -23,13 +25,11 @@ const loginSchema = new Schema({
 });
 loginSchema.statics.authenticateForName = async function (name) {
   try {
-    const user = await UserModel.findOne({name}).exec();
-    const loggedInData = await this.findOne({user,active:true}).exec();
+    const user = await UserModel.findOne({ name }).exec();
+    const loggedInData = await this.findOne({ user, active: true }).exec();
     return (loggedInData);
   } catch (e) {
-    if (!loggedInData) {
-      throw ('NOT FOUND IN LOGINS');
-    }
+    throw new Error('NOT FOUND IN LOGINS');
   }
 };
 
@@ -78,7 +78,7 @@ loginSchema.statics.startLogin = async function (ip, userAgent, user) {
   try {
     const found = await this.findOne({ user: user._id, active: true }).exec();
     if (!found) {
-      throw ('need to create');
+      throw Error('need to create');
     }
     return found;
   } catch (e) {
