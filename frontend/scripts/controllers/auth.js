@@ -12,7 +12,7 @@ const AuthControlMaker = (App) => {
     App.GuiService.setUserBox(user);
     return `User: ${user.name}`;
   };
-  const checkAuthStatus = async function () {
+  const checkAuthStatus = async () => {
     try {
       const oldToken = App.StorageService.get(TAB_SESSION_TOKEN);
       console.log(oldToken);
@@ -26,7 +26,7 @@ const AuthControlMaker = (App) => {
       return onUnAuthorized();
     }
   };
-  const logIn = async function (name, password) {
+  const logIn = async (name, password) => {
     try {
       App.GuiService.setCurrentTemplate('loading');
       const result = await App.ApiService.logIn(name, password);
@@ -44,7 +44,7 @@ const AuthControlMaker = (App) => {
     }
   };
 
-  const signUp = async function (name, password) {
+  const signUp = async (name, password) => {
     try {
       App.GuiService.setCurrentTemplate('loading');
       const result = await App.ApiService.signUp(name, password);
