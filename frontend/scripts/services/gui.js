@@ -45,7 +45,7 @@ const GuiServiceMaker = (App) => {
       // ended making list
       return `${listView}</ul>`;
     },
-    // main "render method", gets a flag and data if necessary from controller
+    // main "render method", gets a flag and data if necessary from controller 
     setCurrentTemplate(templateId, data) {
       const container = document.getElementById('pageContainer');
       let template = App.Templates.loginTemplate;
