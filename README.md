@@ -20,11 +20,6 @@ Conversion notes:
 * Source doc: Elementor test - ziv taller
 ----->
 ELEMENTOR FULL STACK TEST - ZIV TALLER \
-\
-Work time: 2 Days \
-Status: Everything works to spec. \
-
-
 To run: \
 Type <code>docker-compose down && docker-compose up --build -d</code> from the project root.  \
 To test set your environment variables and run npm test from without docker.  \
