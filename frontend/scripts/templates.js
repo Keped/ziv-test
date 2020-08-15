@@ -1,4 +1,11 @@
 const Templates = {
+  modalTemplate: (type, title, text)=> (`
+    <div id="modal-body" class="alert-${type}">
+        <h4>${title}</h4>
+        <p>${text}</p>
+        <input type="button" value="OK" onclick="App.GuiService.toggleModal()"/> 
+    </div>
+  `),  
   loginTemplate: `<form id="loginTemplate" class="auth-form">
     <label for="name">
         Name
@@ -9,8 +16,8 @@ const Templates = {
     </label>
     <input name="password" id="pass" type="password" autocomplete="current-password"/>
     <span>
-    <input value="Login" type="button" onClick="GuiService.onLoginClicked()"></button>
-    <input type="button" value="Go to Signup" onClick="GuiService.setCurrentTemplate('signupTemplate')"></button>
+    <input id="login-btn" value="Login" type="button" onClick="App.GuiService.onLoginClicked()"/>
+    <input id="goto-register-btn" type="button" value="Go to Signup" onClick="App.GuiService.setCurrentTemplate('signupTemplate')"/>
   </form>`,
   signupTemplate: `<form id="signupTemplate" class="auth-form">
     <label for="name">
@@ -26,8 +33,8 @@ const Templates = {
     </label>
     <input id="pass2" type="password" name="password2" autocomplete="new-password"/>
     <span>
-    <input type="button" value="Sign Up" onClick="GuiService.onSignupClicked()"/>
-    <input type="button" value="Go to Login" onClick="GuiService.setCurrentTemplate('loginTemplate')"/>
+    <input id="signup-btn" type="button" value="Sign Up" onClick="App.GuiService.onSignupClicked()"/>
+    <input id="goto-login-btn" type="button" value="Go to Login" onClick="App.GuiService.setCurrentTemplate('loginTemplate')"/>
     </span>
     </form>`,
 };

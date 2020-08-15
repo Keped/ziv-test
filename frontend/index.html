@@ -1,17 +1,18 @@
 <html>
     <head>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="./style/general.css">
     </head>
     <body class="elementor-test">
-       <h1 id="pageTitle"></h1>
+       <!-- these two have to be absolute -->
+       <div class="smother-all" id="modal-background"></div>
+       <div class="smother-all" id="modal-container"></div>
        <div class="user-details" id="detailsBox">
             <h5 id="detailsFoundArea">
                 <span id="detailsFoundTitle"></span>
                 <br/>
-                <a href="#" onClick="logOut()">Disconnect</a>
+                <a href="#" onClick="App.AuthControl.logOut()">Disconnect</a>
             </h5>
-
        </div> 
        <div id="pageContainer"></div>
        <script type="text/javascript" src="./scripts/templates.js" ></script>
@@ -21,6 +22,5 @@
        <script type="text/javascript" src="./scripts/services/gui.js" /></script>
        <script type="text/javascript" src="./scripts/controllers/auth.js" /></script>
        <script type="text/javascript" src="./scripts/controllers/main.js" /></script>
-    
     </body>    
 </html>
