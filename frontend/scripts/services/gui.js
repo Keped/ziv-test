@@ -93,12 +93,7 @@ const GuiServiceMaker = (App) => {
       const nameInput = document.getElementById('name');
       const passInput = document.getElementById('pass');
       this.setCurrentTemplate('loading');
-      App.AuthControl.logIn(nameInput.value, passInput.value).then(()=>{});//.then((res) => {
-        //
-    //     }).catch(()=>{
-    //       alert('login failed!');
-    //       self.setCurrentTemplate('loginTemplate');
-    //     });
+      App.AuthControl.logIn(nameInput.value, passInput.value).then(()=>{});
     },
     // get details for modal from storage and invoke GUI method
     showDetails(id) {
@@ -121,5 +116,8 @@ const GuiServiceMaker = (App) => {
     showDetails: service.showDetails.bind(service),
   };
 };
-
-window.GuiServiceMaker = GuiServiceMaker;
+if (typeof module === 'undefined') {
+  window.GuiServiceMaker = GuiServiceMaker;
+} else {
+  module.exports = GuiServiceMaker;
+}

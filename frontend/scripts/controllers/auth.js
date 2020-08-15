@@ -1,5 +1,5 @@
 // this controller takes care of auth logic.
-function AuthControlMaker(App) {
+const AuthControlMaker = (App) => {
   const { TAB_SESSION_TOKEN } = App.StorageService;
   const onUnAuthorized = () => {
     App.StorageService.set(TAB_SESSION_TOKEN, null);
@@ -16,7 +16,7 @@ function AuthControlMaker(App) {
     try {
       const oldToken = App.StorageService.get(TAB_SESSION_TOKEN);
       console.log(oldToken);
-      const result = await ApiService.authenticate(oldToken);
+      const result = await App.ApiService.authenticate(oldToken);
       const { token, user } = result;
       if (token) {
         return onAuthorized(token, user);
@@ -29,7 +29,7 @@ function AuthControlMaker(App) {
   const logIn = async function (name, password) {
     try {
       App.GuiService.setCurrentTemplate('loading');
-      const result = await ApiService.logIn(name, password);
+      const result = await App.ApiService.logIn(name, password);
       console.log(result);
       const { token, user } = result;
       if (token) {
@@ -47,13 +47,13 @@ function AuthControlMaker(App) {
   const signUp = async function (name, password) {
     try {
       App.GuiService.setCurrentTemplate('loading');
-      const result = await ApiService.signUp(name, password);
+      const result = await App.ApiService.signUp(name, password);
       console.log(result);
       if (result.error) {
         throw new Error(result.error);
       } else {
         App.GuiService.showModal('success', 'Great!', 'Signed up successfuly, now you can login');
-        this.setCurrentTemplate('loginTemplate');
+        App.GuiService.setCurrentTemplate('loginTemplate');
         return true;
       }
     } catch (e) {
@@ -63,7 +63,7 @@ function AuthControlMaker(App) {
   };
   const logOut = function () {
     const token = App.StorageService.get(TAB_SESSION_TOKEN);
-    ApiService.logOut(token).then((res) => {});
+    App.ApiService.logOut(token).then((res) => {});
     App.GuiService.showModal('success', 'Bye', 'Signed out.');
     onUnAuthorized();
   };
@@ -74,4 +74,9 @@ function AuthControlMaker(App) {
     signUp,
   });
 }
-window.AuthControlMaker = AuthControlMaker;
+// JSDOM vs. Browser
+if (typeof module === 'undefined') {
+  window.AuthControlMaker = AuthControlMaker;
+} else {
+  module.exports = AuthControlMaker;
+}

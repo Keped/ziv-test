@@ -1,14 +1,15 @@
 // main controller for this app
+if (typeof require !== 'undefined'){
+  require()
+}
 // handle state change (i.e. get data on token received)
 function MakeApp() {
-  const that = this;
   const App = {
     GuiService:null, // these two are co-dependent and made by constructors
     AuthControl:null,
-    Templates,
-    ApiService,
+    Templates: TemplatesMaker(),
+    ApiService: ApiServiceMaker(),
     StorageService: StorageServiceMaker(),
-    MainControl: that
   };
 
   App.GuiService = GuiServiceMaker(App);
@@ -61,7 +62,7 @@ function MakeApp() {
       const token = App.StorageService.get(TAB_SESSION_TOKEN);
       if (token && token !== 'null') {
         // go for data from server
-        ApiService.getList(token).then((res) => {
+        App.ApiService.getList(token).then((res) => {
           // have we got it?
           const { resultList } = res;
           if (!resultList) {

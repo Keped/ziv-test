@@ -1,4 +1,4 @@
-const Templates = {
+const TemplatesMaker = () => ({
   modalTemplate: (type, title, text)=> (`
     <div id="modal-body" class="alert-${type}">
         <h4>${title}</h4>
@@ -17,7 +17,7 @@ const Templates = {
     <input name="password" id="pass" type="password" autocomplete="current-password"/>
     <span>
     <input id="login-btn" value="Login" type="button" onClick="App.GuiService.onLoginClicked()"/>
-    <input id="goto-register-btn" type="button" value="Go to Signup" onClick="App.GuiService.setCurrentTemplate('signupTemplate')"/>
+    <input id="goto1" type="button" value="Go to Signup" onClick="App.GuiService.setCurrentTemplate('signupTemplate')"/>
   </form>`,
   signupTemplate: `<form id="signupTemplate" class="auth-form">
     <label for="name">
@@ -37,4 +37,9 @@ const Templates = {
     <input id="goto-login-btn" type="button" value="Go to Login" onClick="App.GuiService.setCurrentTemplate('loginTemplate')"/>
     </span>
     </form>`,
-};
+});
+if (typeof module === 'undefined') {
+  window.TemplatesMaker = TemplatesMaker;
+} else {
+  module.exports = TemplatesMaker;
+}
