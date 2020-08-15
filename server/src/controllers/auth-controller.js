@@ -8,11 +8,9 @@ const useragent = require('useragent');
 const UserModel = require('../models/user-model');
 const LoginModel = require('../models/login-model');
 const jwtService = require('../helpers/jwt_helper');
-
+// generic response for token bearing calls
 const onAuthSuccessful = (user, res) => {
-  // console.log(user)
   const token = jwtService.makeNewToken(user.name);
-
   res.status(200).send({ token, user: user.toJSON() });
 };
 
@@ -40,8 +38,10 @@ const AuthController = {
   logIn: async (req, res) => {
     try {
       const { name, password } = req.body; // these have been previously verified
+      // verify name and pass against users db (keeping state)
       const user = await UserModel.logIn(name, password);
       const agent = useragent.parse(req.headers['user-agent']);
+      // create a login event (keeping history)
       await LoginModel.startLogin(req.connection.remoteAddress || req.ip, agent.toAgent(), user);
       onAuthSuccessful(user, res);
     } catch (err) {

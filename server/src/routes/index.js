@@ -9,7 +9,7 @@ const router = express.Router();
 const { body, header, validationResult } = require('express-validator');
 const { ROUTES } = require('../constants');
 const AuthController = require('../controllers/auth-controller');
-const ApiController = require('../controllers/api-controller');
+const LoginsDataController = require('../controllers/logins-data-controller');
 
 const doValidate = (req, res) => {
   const errors = validationResult(req);
@@ -61,7 +61,7 @@ router.post(ROUTES.ACTIVE_LIST, [
   header('client_token').exists(),
 ], async (req, res, next) => {
   if (!doValidate(req, res)) {
-    return ApiController.getList(req, res, next);
+    return LoginsDataController.getList(req, res, next);
   }
 });
 

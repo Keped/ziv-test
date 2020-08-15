@@ -15,7 +15,6 @@ const AuthControlMaker = (App) => {
   const checkAuthStatus = async () => {
     try {
       const oldToken = App.StorageService.get(TAB_SESSION_TOKEN);
-      console.log(oldToken);
       const result = await App.ApiService.authenticate(oldToken);
       const { token, user } = result;
       if (token) {
@@ -30,7 +29,6 @@ const AuthControlMaker = (App) => {
     try {
       App.GuiService.setCurrentTemplate('loading');
       const result = await App.ApiService.logIn(name, password);
-      console.log(result);
       const { token, user } = result;
       if (token) {
         App.GuiService.showModal('success', 'Great!', 'login successful...');
@@ -48,7 +46,6 @@ const AuthControlMaker = (App) => {
     try {
       App.GuiService.setCurrentTemplate('loading');
       const result = await App.ApiService.signUp(name, password);
-      console.log(result);
       if (result.error) {
         throw new Error(result.error);
       } else {

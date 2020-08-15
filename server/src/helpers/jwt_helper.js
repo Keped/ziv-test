@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { ROUTES, ERRORS } = require('../constants');
 const UserModel = require('../models/user-model');
+const { JWT_SECRET } = require('../config');
 
 /**
  * This service takes care of jwt validations and creation.
@@ -9,7 +10,6 @@ const UserModel = require('../models/user-model');
 const {
   AUTHENTICATE, ACTIVE_LIST, DETAILS, LOGOUT,
 } = ROUTES;
-const JWT_SECRET = 'TODO MOVE TO ENVE';
 // taking care of jwt ops
 
 // used by controller to return new token

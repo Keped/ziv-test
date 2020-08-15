@@ -9,8 +9,10 @@ services:
     links:
       - elemongo
     environment: 
-      - ELEMENTOR_DB_HOST_PORT='elemongo:27017/test'
+      - ELEMENTOR_DB_HOST_PORT=elemongo:27017/test
       - ELEMENTOR_WEB_PORT=8080  
+      - ELEMENTOR_JWT_SECRET=shhhhhhhhhhhhhh
+      - ELEMENTOR_STATIC_PATH=/static
   elemongo:
     container_name: elemongo
     image: mongo
