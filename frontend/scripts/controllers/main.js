@@ -8,7 +8,6 @@ function domReady(fn) {
 }
 
 const compareLists = (a, b) => {
-  // let equal
   if (a && b) {
     return serializeObjectArray(a) === serializeObjectArray(b);
   }
@@ -28,6 +27,8 @@ const serializeObjectArray = (dataMap) =>  {
 
 // this is our app startup
 domReady(() => {
+  const { setCurrentTemplate } = GuiService;
+
   // show spinner
   setCurrentTemplate('loading', null);
   // checked if logged in in the server
@@ -37,7 +38,7 @@ domReady(() => {
     setCurrentTemplate('loginTemplate', null);
   });
   // initialize storage so we don't have hangovers
-  StorageService.set(LIST_MAP_TOKEN, {});
+  StorageService.set(LIST_MAP_TOKEN, '{}');
   setInterval(() => {
     // if we have a token (cached from before page refresh of new from /auth/login) 
     // we can try to get data

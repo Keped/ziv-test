@@ -1,18 +1,12 @@
-const appState = { status: 'unauthorized', user: null };
-const onUnAuthorized = function () {
+const onUnAuthorized = function() {
   StorageService.set(TAB_SESSION_TOKEN, null);
-  appState.status = 'authorized';
-  appState.user = null;
-  setUserBox(false);
-  setCurrentTemplate('loginTemplate');
+  GuiService.setUserBox(false);
+  GuiService.setCurrentTemplate('loginTemplate');
   return false;
 };
-const onAuthorized = function (token, user) {
+const onAuthorized = function(token, user) {
   StorageService.set(TAB_SESSION_TOKEN, token);
-  appState.status = 'authorized';
-  appState.user = user;
-  setUserBox(user);
-
+  GuiService.setUserBox(user);
   return `User: ${user.name}`;
 };
 const checkAuthStatus = async function () {
@@ -61,4 +55,39 @@ const logOut = function () {
   const token = StorageService.get(TAB_SESSION_TOKEN);
   ApiService.logOut(token).then((res) => {});
   onUnAuthorized();
+};
+
+window.AuthControl = {
+  async logIn(name, password) {
+    try {
+      const result = await ApiService.logIn(name, password);
+      console.log(result);
+      const { token, user } = result;
+      if (token) {
+        return onAuthorized(token, user);
+      }
+      return onUnAuthorized();
+    } catch (e) {
+      return onUnAuthorized();
+    }
+  },
+  logOut() {
+    const token = StorageService.get(TAB_SESSION_TOKEN);
+    ApiService.logOut(token).then((res) => {});
+    onUnAuthorized();
+  },
+  async signUp(name, password) {
+    try {
+      const result = await ApiService.signUp(name, password);
+      console.log(result);
+      if (result.error) {
+        console.error(result.error);
+      } else {
+        // appStatus = 'authorized';
+        return true;
+      }
+    } catch (e) {
+    //
+    }
+  },
 };
