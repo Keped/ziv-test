@@ -25,8 +25,13 @@ Type <code>docker-compose down && docker-compose up --build -d</code> from the p
 To test set your environment variables and run npm test from without docker.  \
 \
 SERVER
-\
-\
+
+The way I understood the assignment, My basic goal was to do authentication and return to the client a list of connected users, each with some details on himself, his last two logins and his login count. 
+Regarding with the data layer, the three approaches I considered were:
+*   Create one collection/table of users, each with fields for this and last login start/finish and a total logins counter. Pros: faster to develop, shorter code base. Cons: losing all former logins data.
+*   Create one collection of users, each with embedded login documents inside. Pros: still pretty fast and simple to crud, will keep more data.  Cons: very unscalabale.
+*   Create two collections. one of users (real-time state db) and the other one of logins. logins have a many-to-one (unidirectional) reference relationship with  users (or the equivalent JOIN). Pros: scalable and no data loss, which also means more flexibility to future needs. Cons: bigger and slightly more complicated codebase.
+
 *   The server architecture can be described thus: first we have  <strong><code>routing</code></strong> which does just that + input validations, next are <strong><code>middlewares </code></strong>used (here) for authorization. After that come <strong><code>controllers</code></strong>  that invoke the model and return results, and the <strong><code>models</code></strong> themselves (data, entity definitions, complex queries, etc.). This is the actual flow of a request from start to finish.
 *   I used <strong><code>mongoose</code></strong> odm on top of <strong><code>mongodb</code></strong>. ORMs are close to an industry standard, so not much to add on that. 
 *   I have two entities. User `and Login. Logins reference the user (uni-directional). This enables us to quickly retrieve a user when we need just that, and to still have a complete “history” of logins for a user. (embedding logins would have resulted in huge user documents). 
