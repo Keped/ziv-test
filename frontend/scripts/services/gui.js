@@ -57,7 +57,7 @@ const GuiServiceMaker = (App) => {
         template = `<div id="listTemplate">${listView}</div>`;
       }
       if (templateId === 'loading') {
-        template = '<h6 class="spinning">Loading</h6>';
+        template = App.Templates.loading;
         container.innerHTML = template;
       }
       container.innerHTML = (template);

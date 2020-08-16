@@ -37,7 +37,7 @@ userSchema.statics.signUp = async function (name, password) {
 };
 userSchema.statics.logOut = async function (name) {
   try {
-    // find our guy in db
+    // find USER in db
     const user = await this.findOne({ name });
     user.set('isLoggedIn', false);
     user.set('lastUpdateTime', new Date());
@@ -61,7 +61,6 @@ userSchema.statics.logIn = async function (name, password) {
   if (!passwordIsCorrect) {
     throw Error(ERRORS.LOGIN_BAD_PASSWORD);
   }
-  // if he's already here, let's return him
   if (user.isLoggedIn) {
     return user;
   }

@@ -1,4 +1,5 @@
 const TemplatesMaker = () => ({
+  loading: '<h6 class="spinning">Loading</h6>',
   modalTemplate: (type, title, text)=> (`
     <div id="modal-body" class="alert-${type}">
         <h4>${title}</h4>
